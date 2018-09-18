@@ -47,13 +47,11 @@ function shuffle(array) {
 
 var shuffledCard = shuffle(cardList);
 
-
 function createCard(className){
     //create list item with specific class from the above iteration
     var liElement = document.createElement('li');
     var iElement = document.createElement('i');
     iElement.classList.add('fa',className);
-   // console.log(className);
     liElement.appendChild(iElement);
     liElement.classList.add('card');
     return liElement;
@@ -65,10 +63,7 @@ function generateGameBoard(){
        var generatedElement = createCard(shuffledCard[i]); 
        document.querySelector('.deck').appendChild(generatedElement);
    }
-
    activateCard();
-   
-
 }
 
 /*
@@ -82,40 +77,43 @@ function generateGameBoard(){
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
- 
-
 var lastFlipped = null;
 var moves = 0;
 var starsCount = 0;
-
-// var stars;
 var matchedcardCounter = [];
-
 function activateCard(){
-    
     document.querySelectorAll('li.card').forEach(function(card){
-        
+        // if(card.classList.contains('open')){
+        //     card.classList.add('');
+        //     // card.disabled = true;
+        // }
+        // else {
+            
+        // }
         card.addEventListener('click',function(){
-              
-              displayCardSymbol(card);//display the selected card symbol
-             // deactivateCard(card);
+              //display the selected card symbol
+              displayCardSymbol(card);
               openCards(card);
            
         });
     });
-
-    
 }
 
-function deactivateCard(card){
-    // //remove event listener
-       // card.removeEventListener('click',function(card){});
-    
-}
+
 
 
 function displayCardSymbol(card){
-    card.classList.add('show','open');
+    // if(card.classList.contains('open')){
+    //     // card.classList.add('');
+    //     card.classList.remove('show','open','match');
+    //     console.log(card)
+    //     card.disabled = "true";
+    
+    // }
+    // else {
+        card.classList.add('show','open','disable');
+   // }
+    
 }
 
 function openCards(card){
@@ -124,7 +122,6 @@ function openCards(card){
             openCardList[0] = lastFlipped;
             openCardList[1] = card;
         //  lastFlipped = card;
-        
         compareCards(openCardList);
     }
     else {
@@ -133,11 +130,8 @@ function openCards(card){
     }
 }
 
-
-
 function compareCards(openCardList) {
     //logic to compare cards
-
     var test1 = openCardList[0].children;
     var test11 = test1.item(0).classList.item(1);
     var test2 = openCardList[1].children;
@@ -151,11 +145,7 @@ function compareCards(openCardList) {
     }
 }
 
-
-
-function matchedCard(openCardList){
-    // console.log("card matched");
-    
+function matchedCard(openCardList){ 
     matchedcardCounter.push(openCardList[0]);
     matchedcardCounter.push(openCardList[1]);
     
@@ -168,42 +158,24 @@ function matchedCard(openCardList){
     if(matchedcardCounter.length === 16){
         gameOver();
     }
-    
-    
 }
 
 function unmatchedCard(openCardList){
-    // console.log("card dont matched");
-    openCardList[0].classList.remove('show','open');
-    openCardList[1].classList.remove('show','open');
+    openCardList[0].classList.remove('show','open','disable');
+    openCardList[1].classList.remove('show','open','disable');
     openCardList = [];
     lastFlipped = null;
-    moveCounter();
-   
+    moveCounter();  
 }
 
 function moveCounter(){
     moves +=1;
     document.querySelector('.moves').innerHTML = moves;
-    
     stars();
-   
-    
-
 }
 
 function gameOver() {
-    // var h1 = document.createElement('h1');
-    // h1.classList.add('h1class');
-    // var p = document.createElement('p');
-    // h1.innerHTML = 'Congratulations You Won !!!!';
-    // //
-    //  var message =   `<h1 class = "h1class">Congratulations You Won !!!!</h1>
-    //                  <p class = "h1class">With ${moves} moves and 1 stars <br> Woooooo!!!</p>
-    //                  <button id="btn" class = "h1class">Play Again</button>`;
-    //                 //  console.log(message);
-    //                 //  document.querySelector('.deck').innerHTML = '';
-    //                  document.querySelector('.deck').innerHTML = message;
+
     clearInterval(timerVar);
     document.querySelector('#moves-made').innerHTML = moves;
     document.querySelector('#time-elapsed').innerHTML = timeElapsed;
@@ -212,7 +184,6 @@ function gameOver() {
 }
 
 function stars() {
-    // console.log(moves);
 
     if(moves>=2 && moves<=15){
         starsCount = 3;
@@ -227,32 +198,24 @@ function stars() {
 
     if(moves==15){
         document.querySelector('.stars').firstChild.remove();
-        
-    
     } else if(moves==30){
         document.querySelector('.stars').firstChild.remove();
-        
-    
     } else if(moves==45){
-        document.querySelector('.stars').firstChild.remove();
-        
+        document.querySelector('.stars').firstChild.remove();  
     }
 }
 
-//****** var matchedCard = [];
 
-// if(matchedCard ===16){
-//     //logic for game won
-//********* }
 
 //event listiner for restart
 document.querySelector('.restart').addEventListener('click',function(){
     document.querySelector('.deck').innerHTML = '';
     clearInterval(timerVar)
+    shuffledCard = shuffle(cardList);
     generateGameBoard();
+    // displayCardSymbol(card);
     totalSeconds = 0;
     timerVar = setInterval(countTimer, 1000);
-    
     moves = 0; //resets the move counter
     matchedcardCounter = []; //reset matchedcard
     document.querySelector('.moves').innerHTML = moves;
@@ -269,14 +232,12 @@ timerVar = setInterval(countTimer, 1000);
 var totalSeconds = 0;
 var timeElapsed ;
 function countTimer() {
-++totalSeconds;
-var hour = Math.floor(totalSeconds /3600);
-var minute = Math.floor((totalSeconds - hour*3600)/60);
-var seconds = totalSeconds - (hour*3600 + minute*60);
-
-timeElapsed = hour + minute + seconds;
-
-document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+    ++totalSeconds;
+    var hour = Math.floor(totalSeconds /3600);
+    var minute = Math.floor((totalSeconds - hour*3600)/60);
+    var seconds = totalSeconds - (hour*3600 + minute*60);
+    timeElapsed = (hour*3600) + (minute*60) + seconds;
+    document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
 }
 
 //play again button 
@@ -296,10 +257,8 @@ document.querySelector('#playAgain').addEventListener('click',function(){
     document.querySelector('.stars').innerHTML = stars;
     
 })
+
 // Goes into games over fuction
-
-
-
 generateGameBoard();
 
 
