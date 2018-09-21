@@ -87,6 +87,7 @@ h1 {
 }
 
 .deck .card.match {
+    animation-name: rubberBand;
     cursor: default;
     background: #02ccba;
     font-size: 33px;
@@ -131,12 +132,16 @@ h1 {
 }
 .modal-content{
     width: 500px;
-    height: 500px;
+    height:250px;
     background-color: #fff;
     border-radius: 6px;
     text-align: center;
-    margin-top: 120px;
-    padding: 20px; 
+    margin-top: 200px;
+    /* padding: 20px;  */
+    padding-bottom: 50px;
+}
+#modal-head,#modal-footer{
+    background-color: #02b3e4;
 }
 #victor {
     list-style: none;
