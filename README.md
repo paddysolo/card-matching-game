@@ -1,5 +1,5 @@
 # Memory Game Project
-
+# https://paddysolo.github.io/card-matching-game/
 ## Table of Contents
 
 * [Instructions](#instructions)
@@ -7,7 +7,7 @@
 
 ## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+Open the index.html file in your browser and start play
 
 To get started, open `js/app.js` and start building out the app's functionality
 
