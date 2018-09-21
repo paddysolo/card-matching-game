@@ -26,13 +26,14 @@ var cardList = [
     "fa-bicycle",
     "fa-paper-plane-o",
     "fa-cube"
-   ]
+]
 
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length,
+        temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -47,23 +48,24 @@ function shuffle(array) {
 
 var shuffledCard = shuffle(cardList);
 
-function createCard(className){
+function createCard(className) {
     //create list item with specific class from the above iteration
     var liElement = document.createElement('li');
     var iElement = document.createElement('i');
-    iElement.classList.add('fa',className);
+    iElement.classList.add('fa', className);
     liElement.appendChild(iElement);
     liElement.classList.add('card');
     return liElement;
 
 }
-function generateGameBoard(){
-   //call the createCard() function and append it to the ul tag
-   for (var i = 0; i<shuffledCard.length;i++){
-       var generatedElement = createCard(shuffledCard[i]); 
-       document.querySelector('.deck').appendChild(generatedElement);
-   }
-   activateCard();
+
+function generateGameBoard() {
+    //call the createCard() function and append it to the ul tag
+    for (var i = 0; i < shuffledCard.length; i++) {
+        var generatedElement = createCard(shuffledCard[i]);
+        document.querySelector('.deck').appendChild(generatedElement);
+    }
+    activateCard();
 }
 
 /*
@@ -81,20 +83,21 @@ var lastFlipped = null;
 var moves = 0;
 var starsCount = 0;
 var matchedcardCounter = [];
-function activateCard(){
-    document.querySelectorAll('li.card').forEach(function(card){
+
+function activateCard() {
+    document.querySelectorAll('li.card').forEach(function(card) {
         // if(card.classList.contains('open')){
         //     card.classList.add('');
         //     // card.disabled = true;
         // }
         // else {
-            
+
         // }
-        card.addEventListener('click',function(){
-              //display the selected card symbol
-              displayCardSymbol(card);
-              openCards(card);
-           
+        card.addEventListener('click', function() {
+            //display the selected card symbol
+            displayCardSymbol(card);
+            openCards(card);
+
         });
     });
 }
@@ -102,31 +105,30 @@ function activateCard(){
 
 
 
-function displayCardSymbol(card){
+function displayCardSymbol(card) {
     // if(card.classList.contains('open')){
     //     // card.classList.add('');
     //     card.classList.remove('show','open','match');
     //     console.log(card)
     //     card.disabled = "true";
-    
+
     // }
     // else {
-        card.classList.add('show','open','disable');
-   // }
-    
+    card.classList.add('show', 'open', 'disable');
+    // }
+
 }
 
-function openCards(card){
-    if(lastFlipped){
+function openCards(card) {
+    if (lastFlipped) {
         var openCardList = [];
-            openCardList[0] = lastFlipped;
-            openCardList[1] = card;
+        openCardList[0] = lastFlipped;
+        openCardList[1] = card;
         //  lastFlipped = card;
         compareCards(openCardList);
-    }
-    else {
+    } else {
         lastFlipped = card;
-        
+
     }
 }
 
@@ -137,39 +139,38 @@ function compareCards(openCardList) {
     var test2 = openCardList[1].children;
     var test22 = test2.item(0).classList.item(1);
 
-    if(test11 === test22 ){ 
-       matchedCard(openCardList);
-    } 
-    else {
-        setTimeout(function(){unmatchedCard(openCardList)},900);
+    if (test11 === test22) {
+        matchedCard(openCardList);
+    } else {
+        setTimeout(function() { unmatchedCard(openCardList) }, 900);
     }
 }
 
-function matchedCard(openCardList){ 
+function matchedCard(openCardList) {
     matchedcardCounter.push(openCardList[0]);
     matchedcardCounter.push(openCardList[1]);
-    
+
     openCardList[0].classList.add('match');
     openCardList[1].classList.add('match');
     openCardList = [];
     lastFlipped = null;
 
     moveCounter();
-    if(matchedcardCounter.length === 16){
+    if (matchedcardCounter.length === 16) {
         gameOver();
     }
 }
 
-function unmatchedCard(openCardList){
-    openCardList[0].classList.remove('show','open','disable');
-    openCardList[1].classList.remove('show','open','disable');
+function unmatchedCard(openCardList) {
+    openCardList[0].classList.remove('show', 'open', 'disable');
+    openCardList[1].classList.remove('show', 'open', 'disable');
     openCardList = [];
     lastFlipped = null;
-    moveCounter();  
+    moveCounter();
 }
 
-function moveCounter(){
-    moves +=1;
+function moveCounter() {
+    moves += 1;
     document.querySelector('.moves').innerHTML = moves;
     stars();
 }
@@ -185,30 +186,28 @@ function gameOver() {
 
 function stars() {
 
-    if(moves>=2 && moves<=15){
+    if (moves >= 2 && moves <= 15) {
         starsCount = 3;
-    }
-    else if(moves>15 && moves<=45){
+    } else if (moves > 15 && moves <= 45) {
         starsCount = 2;
-    }
-    else if(moves>45){
+    } else if (moves > 45) {
         starsCount = 1;
     }
 
 
-    if(moves==15){
+    if (moves == 15) {
         document.querySelector('.stars').firstChild.remove();
-    } else if(moves==30){
+    } else if (moves == 30) {
         document.querySelector('.stars').firstChild.remove();
-    } else if(moves==45){
-        document.querySelector('.stars').firstChild.remove();  
+    } else if (moves == 45) {
+        document.querySelector('.stars').firstChild.remove();
     }
 }
 
 
 
 //event listiner for restart
-document.querySelector('.restart').addEventListener('click',function(){
+document.querySelector('.restart').addEventListener('click', function() {
     document.querySelector('.deck').innerHTML = '';
     clearInterval(timerVar)
     shuffledCard = shuffle(cardList);
@@ -223,25 +222,26 @@ document.querySelector('.restart').addEventListener('click',function(){
     var stars = '<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>';
     document.querySelector('.stars').innerHTML = '';
     document.querySelector('.stars').innerHTML = stars;
-    
+
 })
 
 
 // timer section
 timerVar = setInterval(countTimer, 1000);
 var totalSeconds = 0;
-var timeElapsed ;
+var timeElapsed;
+
 function countTimer() {
     ++totalSeconds;
-    var hour = Math.floor(totalSeconds /3600);
-    var minute = Math.floor((totalSeconds - hour*3600)/60);
-    var seconds = totalSeconds - (hour*3600 + minute*60);
-    timeElapsed = (hour*3600) + (minute*60) + seconds;
+    var hour = Math.floor(totalSeconds / 3600);
+    var minute = Math.floor((totalSeconds - hour * 3600) / 60);
+    var seconds = totalSeconds - (hour * 3600 + minute * 60);
+    timeElapsed = (hour * 3600) + (minute * 60) + seconds;
     document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
 }
 
 //play again button 
-document.querySelector('#playAgain').addEventListener('click',function(){
+document.querySelector('#playAgain').addEventListener('click', function() {
     document.querySelector('.bg-modal').style.display = 'none';
     document.querySelector('.deck').innerHTML = '';
     generateGameBoard();
@@ -255,14 +255,8 @@ document.querySelector('#playAgain').addEventListener('click',function(){
     var stars = '<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>';
     document.querySelector('.stars').innerHTML = '';
     document.querySelector('.stars').innerHTML = stars;
-    
+
 })
 
 // Goes into games over fuction
 generateGameBoard();
-
-
-
-
-
-
