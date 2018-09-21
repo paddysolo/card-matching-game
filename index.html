@@ -6,6 +6,7 @@
     <meta name="description" content="">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -16,7 +17,7 @@
         </header>
 
         <section class="score-panel">
-        	<label>Time : <span id="timer"> </span></label> <ul class="stars"><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li></ul>
+        	<label>Time : <span id="timer">0:0:0 </span></label> <ul class="stars"><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li></ul>
 
         	 <span class="moves">0</span> Moves 
 
@@ -35,15 +36,17 @@
     <!-- modal section -->
     <div class="bg-modal">
         <div class="modal-content">
-            <img src="https://tse4.mm.bing.net/th?id=OIP.VkAMJ7tPlTf22T4vZ2ozjgHaHa&pid=15.1&P=0&w=150&h=150" style="border-radius:30px; " alt="logo">
-            <p>Congratulations !!! You Won !!!!</p>
+            <!-- <img src="https://tse4.mm.bing.net/th?id=OIP.VkAMJ7tPlTf22T4vZ2ozjgHaHa&pid=15.1&P=0&w=150&h=150" style="border-radius:30px; " alt="logo"> -->
+            <div id="modal-head">
+                <p>Congratulations !!! You Won !!!!</p>
+            </div>
             <p>Game Statistic</p>
             <ul id="victor">
                 <li>Moves Made : <span id="moves-made"></span></li>
                 <li>Time Elapsed : <span id="time-elapsed"></span> Seconds</li>
                 <li>Stars : <span id="stars-won"></span> Stars</li>
             </ul>
-            <button id="playAgain">Play Again</button>
+            <div id="modal-footer"><button id="playAgain">Play Again</button></div>
         </div>
     </div>
 
