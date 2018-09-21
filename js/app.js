@@ -47,28 +47,26 @@ function shuffle(array) {
 
 var shuffledCard = shuffle(cardList);
 
-
 function createCard(className){
     //create list item with specific class from the above iteration
     var liElement = document.createElement('li');
     var iElement = document.createElement('i');
     iElement.classList.add('fa',className);
-   // console.log(className);
     liElement.appendChild(iElement);
     liElement.classList.add('card');
     return liElement;
 
 }
 function generateGameBoard(){
+    if(document.querySelector('.deck').innerHTML != ''){
+          document.querySelector('.deck').innerHTML = '';
+        }
    //call the createCard() function and append it to the ul tag
    for (var i = 0; i<shuffledCard.length;i++){
        var generatedElement = createCard(shuffledCard[i]); 
        document.querySelector('.deck').appendChild(generatedElement);
    }
-
    activateCard();
-   
-
 }
 
 /*
@@ -82,40 +80,37 @@ function generateGameBoard(){
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
- 
-
 var lastFlipped = null;
 var moves = 0;
 var starsCount = 0;
-
-// var stars;
 var matchedcardCounter = [];
+let timer =  document.getElementById("timer");
+let isFirstClick = true;
 
 function activateCard(){
-    
     document.querySelectorAll('li.card').forEach(function(card){
         
         card.addEventListener('click',function(){
               
-              displayCardSymbol(card);//display the selected card symbol
-             // deactivateCard(card);
+              if(isFirstClick) {
+                // Start our timer
+                startTimer();
+                // Change our First Click indicator's value
+                isFirstClick = false;
+            }
+            //display the selected card symbol
+              displayCardSymbol(card);
               openCards(card);
            
         });
     });
-
-    
 }
 
-function deactivateCard(card){
-    // //remove event listener
-       // card.removeEventListener('click',function(card){});
-    
-}
+
 
 
 function displayCardSymbol(card){
-    card.classList.add('show','open');
+        card.classList.add('show','open','disable','animated','flipInY'); 
 }
 
 function openCards(card){
@@ -123,21 +118,15 @@ function openCards(card){
         var openCardList = [];
             openCardList[0] = lastFlipped;
             openCardList[1] = card;
-        //  lastFlipped = card;
-        
         compareCards(openCardList);
     }
     else {
         lastFlipped = card;
-        
     }
 }
 
-
-
 function compareCards(openCardList) {
     //logic to compare cards
-
     var test1 = openCardList[0].children;
     var test11 = test1.item(0).classList.item(1);
     var test2 = openCardList[1].children;
@@ -147,15 +136,11 @@ function compareCards(openCardList) {
        matchedCard(openCardList);
     } 
     else {
-        setTimeout(function(){unmatchedCard(openCardList)},900);
+        setTimeout(function(){unmatchedCard(openCardList)},1000);
     }
 }
 
-
-
-function matchedCard(openCardList){
-    // console.log("card matched");
-    
+function matchedCard(openCardList){ 
     matchedcardCounter.push(openCardList[0]);
     matchedcardCounter.push(openCardList[1]);
     
@@ -168,42 +153,23 @@ function matchedCard(openCardList){
     if(matchedcardCounter.length === 16){
         gameOver();
     }
-    
-    
 }
 
 function unmatchedCard(openCardList){
-    // console.log("card dont matched");
-    openCardList[0].classList.remove('show','open');
-    openCardList[1].classList.remove('show','open');
+    openCardList[0].classList.remove('show','open','disable','animated','flipInY');
+    openCardList[1].classList.remove('show','open','disable','animated','flipInY');
     openCardList = [];
     lastFlipped = null;
-    moveCounter();
-   
+    moveCounter();  
 }
 
 function moveCounter(){
     moves +=1;
     document.querySelector('.moves').innerHTML = moves;
-    
     stars();
-   
-    
-
 }
 
-function gameOver() {
-    // var h1 = document.createElement('h1');
-    // h1.classList.add('h1class');
-    // var p = document.createElement('p');
-    // h1.innerHTML = 'Congratulations You Won !!!!';
-    // //
-    //  var message =   `<h1 class = "h1class">Congratulations You Won !!!!</h1>
-    //                  <p class = "h1class">With ${moves} moves and 1 stars <br> Woooooo!!!</p>
-    //                  <button id="btn" class = "h1class">Play Again</button>`;
-    //                 //  console.log(message);
-    //                 //  document.querySelector('.deck').innerHTML = '';
-    //                  document.querySelector('.deck').innerHTML = message;
+function gameOver(){
     clearInterval(timerVar);
     document.querySelector('#moves-made').innerHTML = moves;
     document.querySelector('#time-elapsed').innerHTML = timeElapsed;
@@ -211,9 +177,7 @@ function gameOver() {
     document.querySelector('.bg-modal').style.display = 'flex';
 }
 
-function stars() {
-    // console.log(moves);
-
+function stars(){
     if(moves>=2 && moves<=15){
         starsCount = 3;
     }
@@ -227,79 +191,67 @@ function stars() {
 
     if(moves==15){
         document.querySelector('.stars').firstChild.remove();
-        
-    
     } else if(moves==30){
         document.querySelector('.stars').firstChild.remove();
-        
-    
     } else if(moves==45){
-        document.querySelector('.stars').firstChild.remove();
-        
+        document.querySelector('.stars').firstChild.remove();  
     }
 }
 
-//****** var matchedCard = [];
 
-// if(matchedCard ===16){
-//     //logic for game won
-//********* }
 
 //event listiner for restart
 document.querySelector('.restart').addEventListener('click',function(){
-    document.querySelector('.deck').innerHTML = '';
-    clearInterval(timerVar)
-    generateGameBoard();
-    totalSeconds = 0;
-    timerVar = setInterval(countTimer, 1000);
-    
-    moves = 0; //resets the move counter
-    matchedcardCounter = []; //reset matchedcard
-    document.querySelector('.moves').innerHTML = moves;
-
-    var stars = '<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>';
-    document.querySelector('.stars').innerHTML = '';
-    document.querySelector('.stars').innerHTML = stars;
-    
-})
+    shuffledCard = shuffle(cardList);
+    initialize();   
+},true)
 
 
 // timer section
-timerVar = setInterval(countTimer, 1000);
 var totalSeconds = 0;
 var timeElapsed ;
+var timerVar = 0;
 function countTimer() {
-++totalSeconds;
-var hour = Math.floor(totalSeconds /3600);
-var minute = Math.floor((totalSeconds - hour*3600)/60);
-var seconds = totalSeconds - (hour*3600 + minute*60);
-
-timeElapsed = hour + minute + seconds;
-
-document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+    ++totalSeconds;
+    var hour = Math.floor(totalSeconds /3600);
+    var minute = Math.floor((totalSeconds - hour*3600)/60);
+    var seconds = totalSeconds - (hour*3600 + minute*60);
+    timeElapsed = (hour*3600) + (minute*60) + seconds;
+   timer.innerHTML = hour + ":" + minute + ":" + seconds;
 }
+
+function startTimer(){
+    timerVar = setInterval(countTimer, 1000);
+}
+function stopTimer(){
+    if(timerVar){
+        clearInterval(timerVar);
+    }
+    
+}
+
 
 //play again button 
 document.querySelector('#playAgain').addEventListener('click',function(){
     document.querySelector('.bg-modal').style.display = 'none';
     document.querySelector('.deck').innerHTML = '';
+    initialize();  
+},true)
+
+function initialize(){
+    timer.innerHTML = '0:0:0';
     generateGameBoard();
     moves = 0; //resets the move counter
-    clearInterval(timerVar);
+    stopTimer();
     totalSeconds = 0;
-    timerVar = setInterval(countTimer, 1000);
     matchedcardCounter = []; //reset matchedcard
     document.querySelector('.moves').innerHTML = moves;
-
+    isFirstClick = true;
     var stars = '<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>';
     document.querySelector('.stars').innerHTML = '';
     document.querySelector('.stars').innerHTML = stars;
-    
-})
+}
 // Goes into games over fuction
-
-
-
 generateGameBoard();
 
 
